@@ -1,14 +1,26 @@
 import './post.css';
 import { MoreVert, ThumbUp, Favorite } from '@material-ui/icons';
-import {Users} from '../../dummyData';
-import {useState} from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import {format} from 'timeago.js';
+import { Link } from 'react-router-dom';
 
-export default function Post({post}) {
-    const [like, setLike] = useState(post.like);
+export default function Post({ post }) {
+    const [like, setLike] = useState(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
+    const [user, setUser] = useState({});
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await axios.get(`/users?userId=${post.userId}`)
+            setUser(res.data);
+        };
+        fetchUser();
+    }, [post.userId]);
 
     const likeHandler = () => {
-        setLike(isLiked? like - 1 : like + 1);
+        setLike(isLiked ? like - 1 : like + 1);
         setIsLiked(!isLiked)
     }
     return (
@@ -16,9 +28,11 @@ export default function Post({post}) {
             <div className="postWrapper">
                 <div className="postTop">
                     <div className="postTopLeft">
-                        <img className="postProfileImg" src={Users.filter((u) => u.id === post.userId)[0].profilePicture} alt="" />
-                        <span className="postUserName">{Users.filter((u) => u.id === post.userId)[0].username}</span>
-                        <span className="postDate">{post.date}</span>
+                        <Link to={`profile/${user.username}`}>
+                        <img className="postProfileImg" src={user.profilePicture || PF+"avatar.jpg"} alt="" />
+                        </Link>
+                        <span className="postUserName">{user.username}</span>
+                        <span className="postDate">{format(post.createdAt)}</span>
                     </div>
                     <div className="postTopRight">
                         <MoreVert />
@@ -26,12 +40,12 @@ export default function Post({post}) {
                 </div>
                 <div className="postCenter">
                     <span className="postText">{post.desc}</span>
-                    <img className="postImg" src={post.photo} alt="" />
+                    <img className="postImg" src={PF + post.img} alt="" />
                 </div>
                 <div className="postBottom">
                     <div className="postBottomLeft">
-                        <ThumbUp htmlColor="blue" className="likeIcon" onClick={likeHandler}/>
-                        <Favorite htmlColor="red" className="likeIcon" onClick={likeHandler}/>
+                        <ThumbUp htmlColor="blue" className="likeIcon" onClick={likeHandler} />
+                        <Favorite htmlColor="red" className="likeIcon" onClick={likeHandler} />
                         <span className="postLikeCounter">{like} people like it</span>
                     </div>
                     <div className="postBottomRight">
