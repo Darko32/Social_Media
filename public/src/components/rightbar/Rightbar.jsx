@@ -13,7 +13,9 @@ export default function Rightbar({ user }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [friends, setFriends] = useState([]);
     const { user: currentUser, dispatch } = useContext(AuthContext);
-    const [followed, setFollowed] = useState(currentUser.followings.includes(user?.id));
+    const [followed, setFollowed] = useState(
+        currentUser.followings.includes(user?.id)
+    );
 
     // useEffect(() => {
     //     setFollowed(currentUser.followings.includes(user?.id))
@@ -91,11 +93,16 @@ export default function Rightbar({ user }) {
                 <h4 className="rightbarTitle">User friends</h4>
                 <div className="rightbarFollowings">
                     {friends.map(friend => (
-                        <Link to={"/profile" + friend.username} style={{ textDecoration: "none" }}>
-                            <div className="rightbarFollowing">
-                                <img src={friend.profilePicture ? PF + friend.profilePicture : PF + "avatar.jpg"} alt="" className="rightbarFollowingImg" />
-                                <span className="rightbarFollowingName">{friend.username}</span>
-                            </div>
+                        <Link to={`/profile/${user.username}`}>
+                            <img
+                                src={
+                                    user.profilePicture
+                                        ? PF + user.profilePicture
+                                        : PF + "person/noAvatar.png"
+                                }
+                                alt=""
+                                className="topbarImg"
+                            />
                         </Link>
                     ))}
 
