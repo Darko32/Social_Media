@@ -47,7 +47,7 @@ export default function Topbar() {
             src={
               user.profilePicture
                 ? PF + user.profilePicture
-                : PF + "person/noAvatar.png"
+                : PF + "/avatar.jpg"
             }
             alt=""
             className="topbarImg"
