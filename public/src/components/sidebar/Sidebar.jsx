@@ -1,7 +1,7 @@
 import './sidebar.css';
 import {RssFeed, Chat, PlayCircleFilledOutlined, Group, Bookmark, HelpOutline, WorkOutline, Event, School} from '@material-ui/icons';
 import {Users} from '../../dummyData';
-import CloseFriends from '../closeFriends/CloseFriends';
+// import CloseFriends from '../closeFriends/CloseFriends';
 
 export default function Sidebar() {
     return (
@@ -47,12 +47,12 @@ export default function Sidebar() {
                 </ul>
                 <button className="sidebarButton">Show More</button>
                 <hr className="sidebarHr"/>
-                <ul className="sidebarFriendList">
+                {/* <ul className="sidebarFriendList">
                     {Users.map(u => (
                         <CloseFriends key={u.id} user={u}/>
                     ))}
                     
-                </ul>
+                </ul> */}
             </div>
         </div>
     )

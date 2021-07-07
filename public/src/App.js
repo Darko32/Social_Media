@@ -1,16 +1,14 @@
-import Home from "./pages/home/Home";
+
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Redirect
 } from "react-router-dom";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
-import Profile from "./components/profile/Profile";
+import Profile from "./profile/Profile";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
-import  Messenger from "./pages/messenger/Messenger";
+
 
 
 
@@ -20,19 +18,8 @@ function App() {
         <div>
             <Router>
                 <Switch>
-                    <Route exact path="/">
-                        {user ? <Home /> : <Register />}
-                    </Route>
-                    <Route path="/login">
-                        {user? <Redirect to="/"/> : <Login />}
-                    </Route>
-                    <Route path="/register">
-                    {user? <Redirect to="/"/> : <Register />}
-                    </Route>
-                    <Route path="/messenger">
-                    {!user? <Redirect to="/"/> : <Messenger />}
-                    </Route>
-                    <Route path="/profile/:username">
+                    
+                    <Route path="/">
                         <Profile />
                     </Route>
                 </Switch>

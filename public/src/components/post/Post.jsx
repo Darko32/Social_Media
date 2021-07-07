@@ -1,21 +1,23 @@
 import './post.css';
 import { MoreVert, ThumbUp, Favorite } from '@material-ui/icons';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { format } from 'timeago.js';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
-export default function Post({ post }) {
-    const [like, setLike] = useState(post.likes.length);
-    const [isLiked, setIsLiked] = useState(false);
+export default function Post({ post, onDeletePost, onUpdatePost }) {
+    // const [like, setLike] = useState(post.likes.length);
+    // const [isLiked, setIsLiked] = useState(false);
     const [user, setUser] = useState({});
+    const [postToEdit, setPostToEdit] = useState(null)
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const { user: currentUser } = useContext(AuthContext);
+    
 
-    useEffect(() => {
-        setIsLiked(post.likes.includes(currentUser._id))
-    },[currentUser._id, post.likes])
+    // useEffect(() => {
+    //     setIsLiked(post.likes.includes(currentUser._id))
+    // },[currentUser._id, post.likes])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -25,15 +27,24 @@ export default function Post({ post }) {
         fetchUser();
     }, [post.userId]);
 
-    const likeHandler = () => {
-        try {
-            axios.put("/posts/" + post._id + "/like", { userId: currentUser._id })
-        } catch (err) {
-            
-        }
-        setLike(isLiked ? like - 1 : like + 1);
-        setIsLiked(!isLiked)
+    const handleEditPost = (e) => {
+        const value = e.target.value
+        setPostToEdit(prevState => {
+            prevState.desc = value
+            return prevState
+        })
     }
+
+    // const likeHandler = () => {
+    //     try {
+    //         axios.put("/posts/" + post._id + "/like", { userId: currentUser._id })
+    //     } catch (err) {
+
+    //     }
+    //     setLike(isLiked ? like - 1 : like + 1);
+    //     setIsLiked(!isLiked)
+    // }
+
     return (
         <div className="post">
             <div className="postWrapper">
@@ -52,18 +63,65 @@ export default function Post({ post }) {
                     </div>
                 </div>
                 <div className="postCenter">
-                    <span className="postText">{post.desc}</span>
-                    <img className="postImg" src={PF + post.img} alt="" />
+                    {!postToEdit && (
+                        <React.Fragment>
+                            {/* <span className="postText">{post.desc}</span> */}
+
+
+                            <img className="postImg" src={PF + post.img} alt="" />
+                        </React.Fragment>
+                    )}
+                    {postToEdit && (
+                        <React.Fragment>
+                            <textarea defaultValue={postToEdit.desc} onChange={handleEditPost} />
+                            <button onClick={() => {
+                                onUpdatePost(post._id, postToEdit.desc)
+                                setPostToEdit(null)
+                            }}>
+                                Update
+                            </button>
+                        </React.Fragment>
+                    )}
                 </div>
                 <div className="postBottom">
                     <div className="postBottomLeft">
-                        <ThumbUp htmlColor="blue" className="likeIcon" onClick={likeHandler} />
-                        <Favorite htmlColor="red" className="likeIcon" onClick={likeHandler} />
-                        <span className="postLikeCounter">{like} people like it</span>
+                        <ThumbUp htmlColor="blue" className="likeIcon" />
+                        <Favorite htmlColor="red" className="likeIcon" />
+                        <span className="postLikeCounter">1 people like it</span>
                     </div>
                     <div className="postBottomRight">
                         <span className="postCommentText">{post.comment} comments</span>
                     </div>
+
+                    <div>
+                        {!postToEdit && (
+                            <button
+                                type="button"
+                                onClick={() => setPostToEdit(post)}
+                            >
+                                Edit
+                            </button>
+                        )}
+
+                        {postToEdit && (
+                            <button
+                                type="button"
+                                onClick={() => setPostToEdit(null)}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                    </div>
+
+                    <div>
+                        <button
+                            type="button"
+                            onClick={() => onDeletePost(post._id)}
+                        >
+                            Delete
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
