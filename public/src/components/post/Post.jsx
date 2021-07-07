@@ -65,7 +65,7 @@ export default function Post({ post, onDeletePost, onUpdatePost }) {
                 <div className="postCenter">
                     {!postToEdit && (
                         <React.Fragment>
-                            {/* <span className="postText">{post.desc}</span> */}
+                            <span className="postText">{post.desc}</span>
 
 
                             <img className="postImg" src={PF + post.img} alt="" />

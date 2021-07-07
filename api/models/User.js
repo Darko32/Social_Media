@@ -27,14 +27,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    followers: {
-        type: Array,
-        default: ""
-    },
-    followings: {
-        type: Array,
-        default: ""
-    },
     isAdmin: {
         type: Boolean,
         default: false
@@ -50,10 +42,6 @@ const UserSchema = new mongoose.Schema({
     from: {
         type: String,
         max: 50
-    },
-    relationship: {
-        type: Number,
-        enum: [1, 2, 3]
     }
 },
     { timestamps: true }
