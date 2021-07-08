@@ -12,7 +12,7 @@ export default function Post({ post, onDeletePost, onUpdatePost }) {
     const [postToEdit, setPostToEdit] = useState(null)
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const { user: currentUser } = useContext(AuthContext);
-    
+    const [user, setUser] = useState({});
 
    
     useEffect(() => {
